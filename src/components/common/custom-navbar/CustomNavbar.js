@@ -1,18 +1,30 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import styles from './CustomNavbar.module.css';
 
 const CustomNavbar = () => {
+    const router = useRouter();
     const [isAuth, setIsAuth] = useState(false);
 
     useEffect(() => {
-        let token = localStorage.getItem('token');
-        if(token){
-            setIsAuth(true)
-        }
+        const checkAuth = () => {
+            const token = localStorage.getItem('token');
+            setIsAuth(!!token);
+        };
+
+        checkAuth();
+        const intervalId = setInterval(checkAuth, 1000);
+
+        return () => clearInterval(intervalId);
     }, []);
+
+    const logoutHandler = () => {
+        localStorage.removeItem('token');
+        router.push('/');
+    }
 
     return (
         <div className={styles.navBar}>
@@ -30,9 +42,12 @@ const CustomNavbar = () => {
                 </div>
             </div>
             <div className={styles.navBarActionContainer}>
-                <Link href="/login">
+                {!isAuth && <Link href="/login">
                     <p className={styles.navBarAction}>Login</p>
-                </Link>
+                </Link>}
+                {isAuth && <div className={styles.logoutBtn} onClick={logoutHandler}>
+                    <p className={styles.navBarAction}>Logout</p>
+                </div>}
             </div>
         </div>
     );

@@ -3,7 +3,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    min-height: 90vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -32,6 +32,6 @@
 
 @media (max-width: 800px) {
     .submitJokeScreenContainer {
-        width: 90%;
+        width: 80%;
     }
 }
