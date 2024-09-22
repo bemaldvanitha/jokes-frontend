@@ -1,0 +1,77 @@
+.navBar {
+    background-color: var(--color-navbar);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navBarHeaderContainer {
+    margin: 0 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navBarHeader {
+    font-family: var(--font-primary);
+    font-weight: bold;
+    font-size: 28px;
+    margin: 0;
+    color: #f0f0f0;
+    cursor: pointer;
+}
+
+.navBarHeaderSubContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 40px;
+}
+
+.navBarActionContainer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 30px;
+}
+
+.navBarAction {
+    font-family: var(--font-primary);
+    font-size: 18px;
+    color: var(--color-background);
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.navBarHeader a, .navBarAction a {
+    text-decoration: none;
+    color: inherit;
+}
+
+@media (max-width: 500px) {
+    .navBarHeaderContainer {
+        margin: 0 10px;
+    }
+
+    .navBarHeader {
+        font-size: 20px;
+    }
+
+    .navBarActionContainer {
+        margin: 0 15px;
+        width: auto;
+    }
+
+    .navBarAction {
+        font-size: 14px;
+        margin: 0 8px;
+    }
+}

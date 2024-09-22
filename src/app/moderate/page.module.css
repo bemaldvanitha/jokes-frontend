@@ -1,0 +1,45 @@
+.moderationJokeScreen {
+    background-image: url("/images/background/dashboard-5.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.moderationJokeScreenContainer {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 224, 0.4);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 800px;
+}
+
+.moderationJokeScreenTitle {
+    font-family: var(--font-primary);
+    font-weight: bold;
+    font-size: 32px;
+    margin: 10px 0;
+    color: #000000;
+}
+
+.moderationJokeScreenBtnContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+@media (max-width: 800px) {
+    .moderationJokeScreenContainer {
+        width: 90%;
+    }
+}

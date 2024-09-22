@@ -1,0 +1,30 @@
+.customButtonContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    width: 300px;
+    cursor: pointer;
+}
+
+.customButtonSmallContainer {
+    width: 150px !important;
+}
+
+.customButtonText {
+    font-family: var(--font-primary);
+    font-weight: bold;
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+@media (max-width: 600px) {
+    .customButtonContainer {
+        width: 75%;
+    }
+
+    .customButtonText {
+        font-size: 14px;
+        margin: 8px 0;
+    }
+}
