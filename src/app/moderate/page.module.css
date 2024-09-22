@@ -38,6 +38,13 @@
     gap: 20px;
 }
 
+.moderationJokeScreenText {
+    font-family: var(--font-primary);
+    font-size: 18px;
+    margin: 10px 0;
+    color: #000000;
+}
+
 @media (max-width: 800px) {
     .moderationJokeScreenContainer {
         width: 80%;

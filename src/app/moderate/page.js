@@ -30,7 +30,10 @@ const ModerateScreen = () => {
         isOtherJokeTypeError: false
     });
 
-    const { data: typeData, isLoading: typeIsLoading, error: typeError } = useGetAllJokeTypesQuery();
+    const [isPendingNonModJokeOver, setIsPendingNonModJokeOver] = useState(false);
+
+    const { data: typeData, isLoading: typeIsLoading, refetch: typeRefetch, error: typeError } =
+        useGetAllJokeTypesQuery();
     const { data: nonModJokeData, isLoading: nonModJokeIsLoading, refetch: nonModJokeRefetch,
         error: nonModJokeError } = useGetNonModeratedJokeQuery();
     const [acceptJoke, { isLoading: acceptJokeIsLoading }] = useAcceptJokeMutation();
@@ -58,6 +61,12 @@ const ModerateScreen = () => {
             });
         }
     }, [nonModJokeData]);
+
+    useEffect(() => {
+        if(nonModJokeError){
+            setIsPendingNonModJokeOver(true);
+        }
+    }, [nonModJokeError]);
 
     const handleChange = (field, value) => {
         setFormData((prevData) => ({
@@ -92,13 +101,14 @@ const ModerateScreen = () => {
             let id = formData?.id;
             let body = {
                 joke: formData?.joke,
-                type: formData?.type
+                type: formData?.type === 'Other' ? formData.otherJokeType : formData.type
             }
 
             const res = await acceptJoke({ id, body }).unwrap();
             cleanFields();
 
             message.success(res?.message);
+            await typeRefetch();
             await nonModJokeRefetch()
         }catch (error){
             console.log(error);
@@ -138,27 +148,32 @@ const ModerateScreen = () => {
             <div className={styles.moderationJokeScreen}>
                 <div className={styles.moderationJokeScreenContainer}>
                     <p className={styles.moderationJokeScreenTitle}>Moderate Jokes</p>
-                    <CustomSelect id={'type'} isError={isFieldError.isTypeError} value={formData.type}
-                                  errorMessage={'Select joke type'} onChangeHandle={typeChangeHandler}
-                                  title={'Select Joke Type'} options={types}/>
-                    {formData.type === 'Other' && <CustomInput type={'text'} value={formData.otherJokeType}
-                                  title={'Enter Joke Type (Other)'} id={'otherJokeType'}
-                                  onChangeHandle={otherJokeTypeChangeHandler}
-                                  isError={isFieldError.isOtherJokeTypeError}
-                                  errorMessage={'Enter valid joke type (other)'}
-                                  placeholder={'Enter joke type (other)'}/>}
-                    <CustomTextArea title={'Enter Joke'} value={formData.joke} placeholder={'Enter joke'}
-                                    errorMessage={'Joke should contain at-least 5 chars'} id={'joke'}
-                                    rows={5} isError={isFieldError.isJokeError}
-                                    onChangeHandle={jokeChangeHandler}/>
-                    <div className={styles.moderationJokeScreenBtnContainer}>
-                        <CustomButton title={'Accept'} bgColor={'#2ecc71'} onClick={acceptHandler}
-                                      fontColor={'#f0f0f0'} isSmall={true}/>
-                        <CustomButton title={'Reject'} bgColor={'#D2042D'} onClick={rejectHandler}
-                                      fontColor={'#f0f0f0'} isSmall={true}/>
-                        <CustomButton title={'Delete'} bgColor={'#e74c3c'} onClick={deleteHandler}
-                                      fontColor={'#f0f0f0'} isSmall={true}/>
-                    </div>
+                    {isPendingNonModJokeOver && <p className={styles.moderationJokeScreenText}>
+                        No Jokes Left To Moderation</p>}
+
+                    {!isPendingNonModJokeOver && <>
+                        <CustomSelect id={'type'} isError={isFieldError.isTypeError} value={formData.type}
+                                      errorMessage={'Select joke type'} onChangeHandle={typeChangeHandler}
+                                      title={'Select Joke Type'} options={types}/>
+                        {formData.type === 'Other' && <CustomInput type={'text'} id={'otherJokeType'}
+                                      value={formData.otherJokeType} title={'Enter Joke Type (Other)'}
+                                      onChangeHandle={otherJokeTypeChangeHandler}
+                                      isError={isFieldError.isOtherJokeTypeError}
+                                      errorMessage={'Enter valid joke type (other)'}
+                                      placeholder={'Enter joke type (other)'}/>}
+                        <CustomTextArea title={'Enter Joke'} value={formData.joke} placeholder={'Enter joke'}
+                                        errorMessage={'Joke should contain at-least 5 chars'} id={'joke'}
+                                        rows={5} isError={isFieldError.isJokeError}
+                                        onChangeHandle={jokeChangeHandler}/>
+                        <div className={styles.moderationJokeScreenBtnContainer}>
+                            <CustomButton title={'Accept'} bgColor={'#2ecc71'} onClick={acceptHandler}
+                                          fontColor={'#f0f0f0'} isSmall={true}/>
+                            <CustomButton title={'Reject'} bgColor={'#D2042D'} onClick={rejectHandler}
+                                          fontColor={'#f0f0f0'} isSmall={true}/>
+                            <CustomButton title={'Delete'} bgColor={'#e74c3c'} onClick={deleteHandler}
+                                          fontColor={'#f0f0f0'} isSmall={true}/>
+                        </div>
+                    </>}
                 </div>
             </div>
         )
